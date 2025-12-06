@@ -1,14 +1,3 @@
----
-title: Matrix Transformation
-emoji: 🎨
-colorFrom: blue
-colorTo: purple
-sdk: streamlit
-sdk_version: 1.39.0
-app_file: web12.py
-pinned: false
----
-
 # Matrix Transformation Image Processing
 
 Linear Algebra project implementing geometric transformations and AI-powered background removal.
