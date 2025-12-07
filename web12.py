@@ -51,6 +51,47 @@ def add_bg_video(video_file):
         [data-testid="stSidebar"] p {{
             font-family: 'Times New Roman', Times, serif !important;
         }}
+
+        /* Main content styling */
+        .main .block-container {{
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 2rem;
+            backdrop-filter: blur(5px);
+        }}
+        
+        /* ✅ JUDUL BESAR TENGAH - TARGET STREAMLIT TITLE */
+        .main h1,
+        .main h2,
+        .main h3 {{
+            text-align: center !important;
+            color: #ffffff !important;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            display: block !important;
+        }}
+        
+        /* Target spesifik untuk st.title dan st.header */
+        [data-testid="stMarkdownContainer"] h1,
+        [data-testid="stMarkdownContainer"] h2,
+        [data-testid="stMarkdownContainer"] h3 {{
+            text-align: center !important;
+        }}
+        
+        /* ✅ SEMUA KONTEN LAIN TETAP KIRI */
+        .main p,
+        .main div:not([data-testid="stMarkdownContainer"]),
+        .main ul,
+        .main ol,
+        .main li {{
+            text-align: left !important;
+        }}
+        
+        .stMarkdown p,
+        .stMarkdown ul,
+        .stMarkdown ol,
+        .stMarkdown li {{
+            text-align: left !important;
+        }}
         
         #video-background {{
             position: fixed;
@@ -63,6 +104,8 @@ def add_bg_video(video_file):
             z-index: -1;
             object-fit: cover;
             opacity: 1;
+            filter: blur(2px);  
+            transform: scale(1.1);
         }}
         
         .stApp {{
@@ -85,6 +128,7 @@ def add_bg_video(video_file):
             border-radius: 10px;
             padding: 2rem;
             backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }}
         
         h1, h2, h3 {{
@@ -155,6 +199,8 @@ def add_bg_video(video_file):
         div[data-testid="stFileUploader"] small,
         div[data-testid="stFileUploader"] label {{
             color: #000000 !important;
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
         }}
 
         /* KHUSUS SELECTBOX SIDEBAR */
@@ -190,7 +236,7 @@ def add_bg_video(video_file):
             text-align: center !important;
         }}
 
-        /* ✅ PAKSA SEMUA TEKS DI DALAM TOMBOL JADI HITAM */
+        /* PAKSA SEMUA TEKS DI DALAM TOMBOL JADI HITAM */
         div[data-testid="stDownloadButton"] *,
         div[data-testid="stDownloadButton"] a *,
         div[data-testid="stDownloadButton"] button * {{
@@ -348,7 +394,7 @@ def apply_background_removal(image, method="AI-Powered (rembg)"):
             pil_image = Image.fromarray(image)
             
             # AI background removal
-            with st.spinner("🤖 AI sedang bekerja..."):
+            with st.spinner("🤖 The AI is working..."):
                 output = remove(pil_image)
             
             # Convert PIL → numpy
@@ -409,23 +455,22 @@ def apply_background_removal(image, method="AI-Powered (rembg)"):
 
 # Sidebar Navigation
 st.sidebar.header("Navigation")
-page = st.sidebar.radio("Go to:", ["Home & Theory", "Image Processing Tools", "Creator Profile"])
+page = st.sidebar.radio("Go to:", ["Homepage", "Image Processing Tools", "Creator Profile"])
 
 # ========================================
 # PAGE 1: HOME & THEORY
 # ========================================
-if page == "Home & Theory":
+if page == "Homepage":
     st.title("Matrix Transformations in Image Processing")
     st.write("### Complete Streamlit Application for Image Transformation Using Matrix Operations")
-
     st.markdown("""
     ---
     ## About This Application
-
+                
     This web application demonstrates the power of **matrix operations** and **convolution** in digital image processing. 
     Through interactive tools, you can apply various transformations to images and see the mathematical principles in action.
 
-    ### What You Can Do:
+    **What You Can Do:**
     - **Geometric Transformations**: Translation, Scaling, Rotation, Shearing, Reflection
     - **Image Filtering**: Blur (Smoothing) and Sharpen filters using convolution
     - **Background Removal**: Advanced segmentation techniques (Bonus Feature)
@@ -479,7 +524,7 @@ if page == "Home & Theory":
         
         Convolution applies a **kernel** (small matrix) to each pixel to create effects:
         
-        **Blur (Smoothing Filter)**
+        **1. Blur (Smoothing Filter)**
         ```
         1/25 × [1  1  1  1  1]
                [1  1  1  1  1]
@@ -489,7 +534,7 @@ if page == "Home & Theory":
         ```
         Averages neighboring pixels to reduce noise and detail.
         
-        **Sharpen (High-pass Filter)**
+        **2. Sharpen (High-pass Filter)**
         ```
         [ 0  -1   0]
         [-1   5  -1]
@@ -497,7 +542,7 @@ if page == "Home & Theory":
         ```
         Enhances edges and details by amplifying differences.
         
-        ### How Convolution Works:
+        **How Convolution Works:**
         1. Place kernel over each pixel
         2. Multiply overlapping values
         3. Sum the results
@@ -525,7 +570,7 @@ elif page == "Image Processing Tools":
     st.write("Upload an image and apply various transformations")
     
     # Upload Image in main area
-    st.subheader("📁 Upload Image")
+    st.write("📁 Upload Image")
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
 
     if uploaded_file is not None:
@@ -592,7 +637,7 @@ elif page == "Image Processing Tools":
                 ["AI-Powered (rembg)", "GrabCut", "Color Thresholding"])
     
             if method == "AI-Powered (rembg)":
-                st.sidebar.info("🤖 Using U²-Net AI model\n\nWorks best for:\n- Portraits\n- Animals\n- Products")
+                st.sidebar.info("🤖 Using AI model\n\nWorks best for:\n- Portraits\n- Animals\n- Products")
     
             transformed_image = apply_background_removal(original_image, method)
 
@@ -600,7 +645,7 @@ elif page == "Image Processing Tools":
         col1, col2 = st.columns(2)
         
         with col1:
-            st.subheader("📷 Original Image")
+            st.subheader("Original Image")
             st.image(original_image, use_container_width=True)
         
         with col2:
@@ -632,11 +677,12 @@ elif page == "Image Processing Tools":
             )
 
     else:
-        st.info("👆 Please upload an image to begin!")
-        st.write("### Supported transformations:")
+        st.info("**👆 Please upload an image to begin!**")
+
+        st.write("**Supported transformations:**")
         st.write("- Translation, Scaling, Rotation, Shearing, Reflection")
         st.write("- Blur and Sharpen filters")
-        st.write("- Background Removal (Bonus)")
+        st.write("- Background Removal")
 
 # ========================================
 # PAGE 3: CREATOR PROFILE
@@ -656,7 +702,7 @@ elif page == "Creator Profile":
             "Course" : "Algebra Linear",
             "role": "Project Leader & Backend Developer",
             "contribution": "creating the website",
-            "photo": "creator.jpg"
+            "photo": "author.jpg"
         },
     ]
     
@@ -742,6 +788,6 @@ elif page == "Creator Profile":
     st.markdown("""
     <div style='text-align: center; color: #ffffff; padding: 20px;'>
         <h4>Thank you for using my website! 🎉</h4>
-        <p>Matrix Transformations & Image Processing Course Project</p>
+        <h5>Matrix Transformations & Image Processing Course Project</h5>
     </div>
     """, unsafe_allow_html=True)
